@@ -1,5 +1,5 @@
 
-package com.example.aspect.impl.internal;
+package com.example.aspect.impl;
 
 import com.example.aspect.CaseVerifier;
 import com.example.aspect.annotation.TryCatch;

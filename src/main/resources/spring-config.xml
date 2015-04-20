@@ -32,7 +32,7 @@
 
     <aop:aspectj-autoproxy proxy-target-class="true"/>
     <bean id="caseVerifier" class="com.example.aspect.CaseVerifier" scope="singleton"/>
-    <bean id="myAspect" class="com.example.aspect.impl.internal.MyAspect">
+    <bean id="myAspect" class="com.example.aspect.impl.MyAspect">
         <constructor-arg ref="caseVerifier"/>
     </bean>
     <bean id="bookingCreator" class="com.example.booking.BookingCreator">
