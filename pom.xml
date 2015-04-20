@@ -7,6 +7,10 @@
     <artifactId>aspect-and-annotation</artifactId>
     <name>Example :: aspects and annotations</name>
     <version>0.0.1-SNAPSHOT</version>
+    <properties>
+        <aspectj.version>1.7.3</aspectj.version>
+        <spring.version>4.1.4.RELEASE</spring.version>
+    </properties>
     <packaging>jar</packaging>
 
     <dependencies>
@@ -32,22 +36,22 @@
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjtools</artifactId>
-            <version>1.7.3</version>
+            <version>${aspectj.version}</version>
         </dependency>
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
-            <version>1.7.3</version>
+            <version>${aspectj.version}</version>
         </dependency>
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
-            <version>1.7.3</version>
+            <version>${aspectj.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>4.1.4.RELEASE</version>
+            <version>${spring.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
