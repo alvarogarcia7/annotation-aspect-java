@@ -1,0 +1,7 @@
+.idea
+*.iml
+/target
+*.log
+nbactions.xml
+test.txt
+nb-configuration.xml
