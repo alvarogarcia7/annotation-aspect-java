@@ -1,8 +1,9 @@
 
-package com.example.aspect.impl;
+package com.example.booking;
+
 
 import com.example.aspect.annotation.TryCatch;
-import com.exception.BusinessRuleException;
+import com.example.exception.BusinessRuleException;
 
 public class BookingCreator {
 

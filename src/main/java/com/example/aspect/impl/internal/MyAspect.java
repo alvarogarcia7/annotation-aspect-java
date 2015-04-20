@@ -18,7 +18,7 @@ public class MyAspect {
 
 	private CaseVerifier collaborator;
 
-	@Pointcut(value = "execution(public * com.example.aspect.impl.BookingCreator.create(..))")
+	@Pointcut(value = "execution(public * com.example.booking.BookingCreator.create(..))")
 	public void businessRules() {
 	}
 
