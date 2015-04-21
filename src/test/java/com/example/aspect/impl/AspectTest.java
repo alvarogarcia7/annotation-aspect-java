@@ -39,16 +39,17 @@ public class AspectTest {
 
 		myComponent.create(new BusinessRuleException());
 
-		assertThat(caseVerifier.isBefore(), is(true));
-		assertThat(caseVerifier.isAfter(), is(false));
-		assertThat(caseVerifier.isExpected(), is(true));
-		assertThat(caseVerifier.isUnexpected(), is(false));
+		assertCapturedException();
 	}
 
 	@Test
 	public void capture_the_second_correct_exception() throws Exception {
 		myComponent.create(new InvalidClassException(""));
 
+		assertCapturedException();
+	}
+
+	private void assertCapturedException() {
 		assertThat(caseVerifier.isBefore(), is(true));
 		assertThat(caseVerifier.isAfter(), is(false));
 		assertThat(caseVerifier.isExpected(), is(true));
