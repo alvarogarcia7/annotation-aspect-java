@@ -10,6 +10,8 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.io.InvalidClassException;
+
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -33,9 +35,19 @@ public class AspectTest {
 	}
 
 	@Test
-	public void capture_the_correct_exception() throws Exception {
+	public void capture_the_first_correct_exception() throws Exception {
 
 		myComponent.create(new BusinessRuleException());
+
+		assertThat(caseVerifier.isBefore(), is(true));
+		assertThat(caseVerifier.isAfter(), is(false));
+		assertThat(caseVerifier.isExpected(), is(true));
+		assertThat(caseVerifier.isUnexpected(), is(false));
+	}
+
+	@Test
+	public void capture_the_second_correct_exception() throws Exception {
+		myComponent.create(new InvalidClassException(""));
 
 		assertThat(caseVerifier.isBefore(), is(true));
 		assertThat(caseVerifier.isAfter(), is(false));

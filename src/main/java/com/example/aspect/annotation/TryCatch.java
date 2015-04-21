@@ -9,5 +9,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface TryCatch {
-	Class<? extends Exception> catchException();
+	Class<? extends Exception>[] catchException();
 }
