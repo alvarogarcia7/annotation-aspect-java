@@ -49,13 +49,6 @@ public class AspectTest {
 		assertCapturedException();
 	}
 
-	private void assertCapturedException() {
-		assertThat(caseVerifier.isBefore(), is(true));
-		assertThat(caseVerifier.isAfter(), is(false));
-		assertThat(caseVerifier.isExpected(), is(true));
-		assertThat(caseVerifier.isUnexpected(), is(false));
-	}
-
 	@Test
 	public void not_affect_a_correct_execution() throws Exception {
 
@@ -80,6 +73,13 @@ public class AspectTest {
 		assertThat(caseVerifier.isAfter(), is(false));
 		assertThat(caseVerifier.isExpected(), is(false));
 		assertThat(caseVerifier.isUnexpected(), is(true));
+	}
+
+	private void assertCapturedException() {
+		assertThat(caseVerifier.isBefore(), is(true));
+		assertThat(caseVerifier.isAfter(), is(false));
+		assertThat(caseVerifier.isExpected(), is(true));
+		assertThat(caseVerifier.isUnexpected(), is(false));
 	}
 
 }
