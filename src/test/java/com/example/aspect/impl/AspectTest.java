@@ -1,9 +1,7 @@
 package com.example.aspect.impl;
 
 import com.example.aspect.CaseVerifier;
-import com.example.aspect.annotation.InjectedLogger;
 import com.example.booking.BookingCreator;
-import com.example.booking.MyLogger;
 import com.example.exception.BusinessRuleException;
 import org.junit.Before;
 import org.junit.BeforeClass;
