@@ -13,7 +13,7 @@ public class BookingCreator {
 	@InjectedLogger
 	public MyLogger logger = new MyLogger();
 
-	@TryCatch(catchException= {BusinessRuleException.class, InvalidClassException.class}, actOn = InjectedLogger.class)
+	@TryCatch(catchException= {BusinessRuleException.class, InvalidClassException.class})
 	public void create(final Exception value) throws Exception {
 		if (value != null) {
 			throw value;
