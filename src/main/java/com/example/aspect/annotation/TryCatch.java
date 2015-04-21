@@ -10,4 +10,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface TryCatch {
 	Class<? extends Exception>[] catchException();
+
+	Class<?> actOn();
 }

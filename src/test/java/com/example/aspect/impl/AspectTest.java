@@ -1,7 +1,9 @@
 package com.example.aspect.impl;
 
 import com.example.aspect.CaseVerifier;
+import com.example.aspect.annotation.InjectedLogger;
 import com.example.booking.BookingCreator;
+import com.example.booking.MyLogger;
 import com.example.exception.BusinessRuleException;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -34,6 +36,9 @@ public class AspectTest {
 		myComponent = appContext.getBean(BookingCreator.class);
 	}
 
+//	@InjectedLogger
+//	public MyLogger mockLogger = mock(MyLogger.class);
+
 	@Test
 	public void capture_the_first_correct_exception() throws Exception {
 
@@ -48,6 +53,16 @@ public class AspectTest {
 
 		assertCapturedException();
 	}
+
+	@Test
+	public void should_interact_with_my_collaborator() throws Exception {
+
+		myComponent.create(new InvalidClassException(""));
+
+		assertCapturedException();
+	}
+
+
 
 	@Test
 	public void not_affect_a_correct_execution() throws Exception {

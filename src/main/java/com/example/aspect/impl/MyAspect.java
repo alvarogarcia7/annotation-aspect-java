@@ -3,11 +3,13 @@ package com.example.aspect.impl;
 
 import com.example.aspect.CaseVerifier;
 import com.example.aspect.annotation.TryCatch;
+import com.example.booking.MyLogger;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,8 +22,29 @@ public class MyAspect {
 		collaborator = verifier;
 	}
 
+////	@Pointcut(value = "execution(public * com.example.booking.BookingCreator.create(..))")
+//	@Pointcut(value = "execution(public * perthis(accessLogger()))")
+//	public void accessLogger(){
+//	}
+
+
+//	@Around("accessLogger() && @annotation(tryCatch)")
+//	public Object process2(ProceedingJoinPoint jointPoint, TryCatch tryCatch) throws Throwable {
+//		return null;
+//	}
+
+
+
 
 	private CaseVerifier collaborator;
+
+
+//	private static final ThreadLocal<Integer> threadId =
+//			new ThreadLocal<Integer>() {
+//				@Override protected Integer initialValue() {
+//					return 1;
+//				}
+//			};
 
 	@Pointcut(value = "execution(public * com.example.booking.BookingCreator.create(..))")
 	public void businessRules() {
@@ -40,6 +63,20 @@ public class MyAspect {
 		} catch (Exception e){
 
 			final String actualExceptionName = e.getClass().getCanonicalName();
+
+			final Object object = jointPoint.getTarget();
+			final Field logger = object.getClass().getFields()[0];
+			logger.setAccessible(true);
+			((MyLogger)logger.get(object)).logException(e);
+
+//			String tryCatchCollaboratorName = InjectedLogger.class.getCanonicalName();
+//			List<Field> fieldsWithAnnotation = Arrays.asList(tryCatch.getClass().getFields()).stream().filter(x -> {
+//				final boolean containsADeclaration = Arrays.asList(x.getDeclaredAnnotations()).stream().filter(y -> y.getClass().getCanonicalName().equals(tryCatchCollaboratorName)).findAny().isPresent();
+//				return containsADeclaration;
+//			}).collect(Collectors.toList());
+//
+//			System.out.println(fieldsWithAnnotation);
+
 
 			if (exceptionNames.contains(actualExceptionName)) {
 				collaborator.capturedExpectedException();
