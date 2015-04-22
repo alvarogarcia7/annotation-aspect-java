@@ -12,14 +12,10 @@ import org.aspectj.lang.annotation.Pointcut;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.util.Arrays.*;
-import static java.util.stream.Collectors.*;
 import static java.util.stream.Collectors.toList;
 
 @Aspect
@@ -72,10 +68,9 @@ public class MyAspect {
 			final Object object = jointPoint.getTarget();
 
 			List<Field> fieldList = asList(object.getClass().getFields()).stream().collect(toList());
-			Predicate<Annotation> containsCanonicalName = y -> y.annotationType().getCanonicalName().equals(InjectedLogger.class.getCanonicalName());
 			for (Field field : fieldList) {
 				for (Annotation annotation : field.getDeclaredAnnotations()) {
-					if(containsCanonicalName.test(annotation)) {
+					if(sameAs(annotation, InjectedLogger.class)) {
 						final Field logger = field;
 						logger.setAccessible(true);
 						((MyLogger) field.get(object)).logException(e);
@@ -92,5 +87,13 @@ public class MyAspect {
 			}
 		}
 		return null;
+	}
+
+	private boolean sameAs(Annotation annotation, Class<InjectedLogger> clazz) {
+		return equality(clazz).test(annotation);
+	}
+
+	private Predicate<Annotation> equality(Class<?> clazz) {
+		return y -> y.annotationType().getCanonicalName().equals(clazz.getCanonicalName());
 	}
 }
