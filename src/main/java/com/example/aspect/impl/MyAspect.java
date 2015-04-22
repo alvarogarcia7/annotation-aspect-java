@@ -69,9 +69,7 @@ public class MyAspect {
 
 			ArrayList<MyLogger> loggers = findLoggersIn(object);
 
-			for(MyLogger logger : loggers){
-				 logger.logException(e);
-			}
+			printLogInAll(e, loggers);
 
 			final String actualExceptionName = e.getClass().getCanonicalName();
 			if (exceptionNames.contains(actualExceptionName)) {
@@ -82,6 +80,12 @@ public class MyAspect {
 			}
 		}
 		return null;
+	}
+
+	private void printLogInAll(Exception e, ArrayList<MyLogger> loggers) {
+		for(MyLogger logger : loggers){
+			 logger.logException(e);
+		}
 	}
 
 	private ArrayList<MyLogger> findLoggersIn(Object object) throws IllegalAccessException {
