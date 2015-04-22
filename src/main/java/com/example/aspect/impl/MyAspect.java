@@ -65,11 +65,8 @@ public class MyAspect {
 			collaborator.afterJointPoint();
 			return proceed;
 		} catch (Exception e){
-
 			ArrayList<MyLogger> loggers = findLoggersIn(jointPoint);
-
 			printLogInAll(e, loggers);
-
 			captureOrRethrow(exceptionNames, e);
 		}
 		return null;
