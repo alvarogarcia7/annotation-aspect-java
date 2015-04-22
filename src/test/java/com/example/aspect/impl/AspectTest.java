@@ -2,18 +2,22 @@ package com.example.aspect.impl;
 
 import com.example.aspect.CaseVerifier;
 import com.example.booking.BookingCreator;
+import com.example.booking.MyLogger;
 import com.example.exception.BusinessRuleException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.Mockito;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.InvalidClassException;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 public class AspectTest {
 
@@ -40,6 +44,17 @@ public class AspectTest {
 		myComponent.create(new BusinessRuleException());
 
 		assertCapturedException();
+	}
+
+	@Test
+	public void invoke_the_logger() throws Exception {
+		final MyLogger mock = mock(MyLogger.class);
+		myComponent.setLogger(mock);
+
+		final InvalidClassException invalidClassException = new InvalidClassException("");
+		myComponent.create(invalidClassException);
+
+		verify(mock).logException(invalidClassException);
 	}
 
 	@Test

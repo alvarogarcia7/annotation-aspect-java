@@ -22,4 +22,8 @@ public class BookingCreator {
 			throw value;
 		}
 	}
+
+	public void setLogger(MyLogger logger){
+		this.logger = logger;
+	}
 }
