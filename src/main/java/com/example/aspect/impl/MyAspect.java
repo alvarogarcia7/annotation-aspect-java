@@ -25,29 +25,7 @@ public class MyAspect {
 		collaborator = verifier;
 	}
 
-////	@Pointcut(value = "execution(public * com.example.booking.BookingCreator.create(..))")
-//	@Pointcut(value = "execution(public * perthis(accessLogger()))")
-//	public void accessLogger(){
-//	}
-
-
-//	@Around("accessLogger() && @annotation(tryCatch)")
-//	public Object process2(ProceedingJoinPoint jointPoint, TryCatch tryCatch) throws Throwable {
-//		return null;
-//	}
-
-
-
-
 	private CaseVerifier collaborator;
-
-
-//	private static final ThreadLocal<Integer> threadId =
-//			new ThreadLocal<Integer>() {
-//				@Override protected Integer initialValue() {
-//					return 1;
-//				}
-//			};
 
 	@Pointcut(value = "execution(public * com.example.booking.BookingCreator.create(..))")
 	public void businessRules() {
