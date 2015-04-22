@@ -34,9 +34,6 @@ public class AspectTest {
 		myComponent = appContext.getBean(BookingCreator.class);
 	}
 
-//	@InjectedLogger
-//	public MyLogger mockLogger = mock(MyLogger.class);
-
 	@Test
 	public void capture_the_first_correct_exception() throws Exception {
 
