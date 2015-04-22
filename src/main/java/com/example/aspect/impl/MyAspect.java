@@ -18,6 +18,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.Arrays.*;
+import static java.util.stream.Collectors.*;
 import static java.util.stream.Collectors.toList;
 
 @Aspect
@@ -59,7 +61,7 @@ public class MyAspect {
 	public Object process(ProceedingJoinPoint jointPoint, TryCatch tryCatch) throws Throwable {
 		Class<? extends Exception>[] exceptionsToBeCaught = tryCatch.catchException();
 
-		List<String> exceptionNames = Arrays.asList(exceptionsToBeCaught).stream().map(x -> x.getCanonicalName()).collect(toList());
+		List<String> exceptionNames = asList(exceptionsToBeCaught).stream().map(x -> x.getCanonicalName()).collect(toList());
 		try {
 			collaborator.beforeJointPoint();
 			final Object proceed = jointPoint.proceed();
@@ -69,7 +71,7 @@ public class MyAspect {
 
 			final Object object = jointPoint.getTarget();
 
-			List<Field> fieldList = Arrays.asList(object.getClass().getFields()).stream().collect(Collectors.toList());
+			List<Field> fieldList = asList(object.getClass().getFields()).stream().collect(toList());
 			Predicate<Annotation> containsCanonicalName = y -> y.annotationType().getCanonicalName().equals(InjectedLogger.class.getCanonicalName());
 			for (Field field : fieldList) {
 				for (Annotation annotation : field.getDeclaredAnnotations()) {
