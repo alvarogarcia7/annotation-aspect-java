@@ -67,14 +67,7 @@ public class MyAspect {
 			return proceed;
 		} catch (Exception e){
 
-
-
-			final String actualExceptionName = e.getClass().getCanonicalName();
-
 			final Object object = jointPoint.getTarget();
-			final Field logger = object.getClass().getFields()[0];
-			logger.setAccessible(true);
-			((MyLogger)logger.get(object)).logException(e);
 
 			final Field[] fields = object.getClass().getFields();
 			List<Field> fieldList = Arrays.asList(fields).stream().collect(Collectors.toList());
@@ -82,28 +75,15 @@ public class MyAspect {
 			for (Field field : fieldList) {
 				for (Annotation annotation : field.getDeclaredAnnotations()) {
 					boolean matchesAnnotation = containsCanonicalName.test(annotation);
-//					matchesAnnotation = annotation.annotationType().getCanonicalName().equals(InjectedLogger.class.getCanonicalName());
-					System.out.println("field: " + field + ", " + matchesAnnotation);
+					if(matchesAnnotation) {
+						final Field logger = field;
+						logger.setAccessible(true);
+						((MyLogger) field.get(object)).logException(e);
+					}
 				}
 			}
 
-
-//			List<Field> loggers = fieldStream.filter(x -> {
-//				System.out.println(x);
-////				return Arrays.asList(x.getDeclaredAnnotations()).stream().filter(containsCanonicalName).findAny().isPresent();
-//				return Arrays.asList(x.getDeclaredAnnotations()).stream().map(z->{
-//					System.out.println(z); return containsCanonicalName.test(z);});
-//			}).collect(Collectors.toList());
-
-//			String tryCatchCollaboratorName = InjectedLogger.class.getCanonicalName();
-//			List<Field> fieldsWithAnnotation = Arrays.asList(tryCatch.getClass().getFields()).stream().filter(x -> {
-//				final boolean containsADeclaration = Arrays.asList(x.getDeclaredAnnotations()).stream().filter(y -> y.getClass().getCanonicalName().equals(tryCatchCollaboratorName)).findAny().isPresent();
-//				return containsADeclaration;
-//			}).collect(Collectors.toList());
-//
-//			System.out.println(fieldsWithAnnotation);
-
-
+			final String actualExceptionName = e.getClass().getCanonicalName();
 			if (exceptionNames.contains(actualExceptionName)) {
 				collaborator.capturedExpectedException();
 			} else {
