@@ -69,13 +69,11 @@ public class MyAspect {
 
 			final Object object = jointPoint.getTarget();
 
-			final Field[] fields = object.getClass().getFields();
-			List<Field> fieldList = Arrays.asList(fields).stream().collect(Collectors.toList());
+			List<Field> fieldList = Arrays.asList(object.getClass().getFields()).stream().collect(Collectors.toList());
 			Predicate<Annotation> containsCanonicalName = y -> y.annotationType().getCanonicalName().equals(InjectedLogger.class.getCanonicalName());
 			for (Field field : fieldList) {
 				for (Annotation annotation : field.getDeclaredAnnotations()) {
-					boolean matchesAnnotation = containsCanonicalName.test(annotation);
-					if(matchesAnnotation) {
+					if(containsCanonicalName.test(annotation)) {
 						final Field logger = field;
 						logger.setAccessible(true);
 						((MyLogger) field.get(object)).logException(e);
