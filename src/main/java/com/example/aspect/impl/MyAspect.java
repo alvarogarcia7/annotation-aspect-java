@@ -5,6 +5,7 @@ import com.example.aspect.CaseVerifier;
 import com.example.aspect.annotation.InjectedLogger;
 import com.example.aspect.annotation.TryCatch;
 import com.example.booking.MyLogger;
+import jdk.nashorn.internal.objects.NativeDebug;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -65,21 +66,23 @@ public class MyAspect {
 			return proceed;
 		} catch (Exception e){
 
-			final Object object = jointPoint.getTarget();
-
-			ArrayList<MyLogger> loggers = findLoggersIn(object);
+			ArrayList<MyLogger> loggers = findLoggersIn(jointPoint);
 
 			printLogInAll(e, loggers);
 
-			final String actualExceptionName = e.getClass().getCanonicalName();
-			if (exceptionNames.contains(actualExceptionName)) {
-				collaborator.capturedExpectedException();
-			} else {
-				collaborator.capturedUnexpectedException();
-				throw e;
-			}
+			captureOrRethrow(exceptionNames, e);
 		}
 		return null;
+	}
+
+	private void captureOrRethrow(List<String> exceptionNames, Exception e) throws Exception {
+		final String actualExceptionName = e.getClass().getCanonicalName();
+		if (exceptionNames.contains(actualExceptionName)) {
+			collaborator.capturedExpectedException();
+		} else {
+			collaborator.capturedUnexpectedException();
+			throw e;
+		}
 	}
 
 	private void printLogInAll(Exception e, ArrayList<MyLogger> loggers) {
@@ -88,7 +91,8 @@ public class MyAspect {
 		}
 	}
 
-	private ArrayList<MyLogger> findLoggersIn(Object object) throws IllegalAccessException {
+	private ArrayList<MyLogger> findLoggersIn(ProceedingJoinPoint jp) throws IllegalAccessException {
+		Object object = jp.getTarget();
 		List<Field> fieldList = asList(object.getClass().getFields()).stream().collect(toList());
 		ArrayList<MyLogger> loggers = new ArrayList<>();
 		for (Field field : fieldList) {
