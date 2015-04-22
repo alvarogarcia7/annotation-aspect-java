@@ -2,14 +2,21 @@
 package com.example.aspect.impl;
 
 import com.example.aspect.CaseVerifier;
+import com.example.aspect.annotation.InjectedLogger;
 import com.example.aspect.annotation.TryCatch;
+import com.example.booking.MyLogger;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
@@ -20,8 +27,29 @@ public class MyAspect {
 		collaborator = verifier;
 	}
 
+////	@Pointcut(value = "execution(public * com.example.booking.BookingCreator.create(..))")
+//	@Pointcut(value = "execution(public * perthis(accessLogger()))")
+//	public void accessLogger(){
+//	}
+
+
+//	@Around("accessLogger() && @annotation(tryCatch)")
+//	public Object process2(ProceedingJoinPoint jointPoint, TryCatch tryCatch) throws Throwable {
+//		return null;
+//	}
+
+
+
 
 	private CaseVerifier collaborator;
+
+
+//	private static final ThreadLocal<Integer> threadId =
+//			new ThreadLocal<Integer>() {
+//				@Override protected Integer initialValue() {
+//					return 1;
+//				}
+//			};
 
 	@Pointcut(value = "execution(public * com.example.booking.BookingCreator.create(..))")
 	public void businessRules() {
@@ -39,8 +67,23 @@ public class MyAspect {
 			return proceed;
 		} catch (Exception e){
 
-			final String actualExceptionName = e.getClass().getCanonicalName();
+			final Object object = jointPoint.getTarget();
 
+			final Field[] fields = object.getClass().getFields();
+			List<Field> fieldList = Arrays.asList(fields).stream().collect(Collectors.toList());
+			Predicate<Annotation> containsCanonicalName = y -> y.annotationType().getCanonicalName().equals(InjectedLogger.class.getCanonicalName());
+			for (Field field : fieldList) {
+				for (Annotation annotation : field.getDeclaredAnnotations()) {
+					boolean matchesAnnotation = containsCanonicalName.test(annotation);
+					if(matchesAnnotation) {
+						final Field logger = field;
+						logger.setAccessible(true);
+						((MyLogger) field.get(object)).logException(e);
+					}
+				}
+			}
+
+			final String actualExceptionName = e.getClass().getCanonicalName();
 			if (exceptionNames.contains(actualExceptionName)) {
 				collaborator.capturedExpectedException();
 			} else {
