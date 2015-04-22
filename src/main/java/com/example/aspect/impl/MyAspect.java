@@ -5,7 +5,6 @@ import com.example.aspect.CaseVerifier;
 import com.example.aspect.annotation.InjectedLogger;
 import com.example.aspect.annotation.TryCatch;
 import com.example.booking.MyLogger;
-import jdk.nashorn.internal.objects.NativeDebug;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -56,9 +55,7 @@ public class MyAspect {
 
 	@Around("businessRules() && @annotation(tryCatch)")
 	public Object process(ProceedingJoinPoint jointPoint, TryCatch tryCatch) throws Throwable {
-		Class<? extends Exception>[] exceptionsToBeCaught = tryCatch.catchException();
-
-		List<String> exceptionNames = asList(exceptionsToBeCaught).stream().map(x -> x.getCanonicalName()).collect(toList());
+		List<String> exceptionNames = getExceptionsToBeCapturedFrom(tryCatch);
 		try {
 			collaborator.beforeJointPoint();
 			final Object proceed = jointPoint.proceed();
@@ -70,6 +67,12 @@ public class MyAspect {
 			captureOrRethrow(exceptionNames, e);
 		}
 		return null;
+	}
+
+	private List<String> getExceptionsToBeCapturedFrom(TryCatch tryCatch) {
+		Class<? extends Exception>[] exceptionsToBeCaught = tryCatch.catchException();
+
+		return asList(exceptionsToBeCaught).stream().map(x -> x.getCanonicalName()).collect(toList());
 	}
 
 	private void captureOrRethrow(List<String> exceptionNames, Exception e) throws Exception {
