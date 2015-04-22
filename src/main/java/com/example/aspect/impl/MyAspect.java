@@ -12,10 +12,11 @@ import org.aspectj.lang.annotation.Pointcut;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
 
-import static java.util.Arrays.*;
+import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
 @Aspect
