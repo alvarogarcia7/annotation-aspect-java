@@ -63,7 +63,7 @@ public class MyAspect {
 			return proceed;
 		} catch (Exception e){
 			ArrayList<MyLogger> loggers = findLoggersIn(jointPoint);
-			logInAll(e, loggers);
+			logInAll(loggers, e);
 			captureOrRethrow(exceptionNames, e);
 		}
 		return null;
@@ -85,7 +85,7 @@ public class MyAspect {
 		}
 	}
 
-	private void logInAll(Exception e, ArrayList<MyLogger> loggers) {
+	private void logInAll(ArrayList<MyLogger> loggers, Exception e) {
 		for(MyLogger logger : loggers){
 			 logger.logException(e);
 		}
