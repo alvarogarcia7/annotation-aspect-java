@@ -11,7 +11,7 @@ import java.io.InvalidClassException;
 public class BookingCreator {
 
 	@InjectedLogger
-	public MyLogger logger = new MyLogger();
+	private MyLogger logger = new MyLogger();
 
 	@Deprecated
 	public MyLogger fakeLogger = new MyLogger();
