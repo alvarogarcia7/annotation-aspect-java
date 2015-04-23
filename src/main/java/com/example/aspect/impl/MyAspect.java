@@ -72,13 +72,13 @@ public class MyAspect {
 
 	private ArrayList<MyLogger> findLoggersIn(ProceedingJoinPoint jp) throws IllegalAccessException {
 		Object object = jp.getTarget();
-		List<Field> fieldList = asList(object.getClass().getFields()).stream().collect(toList());
+		List<Field> fieldList = asList(object.getClass().getDeclaredFields()).stream().collect(toList());
 		ArrayList<MyLogger> loggers = new ArrayList<>();
 		for (Field field : fieldList) {
 			for (Annotation annotation : field.getDeclaredAnnotations()) {
 				if(sameAs(annotation, InjectedLogger.class)) {
-					final Object logger = field.get(object);
 					field.setAccessible(true);
+					final Object logger = field.get(object);
 					loggers.add(((MyLogger) logger));
 				}
 			}
