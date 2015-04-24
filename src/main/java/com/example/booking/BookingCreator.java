@@ -14,16 +14,23 @@ public class BookingCreator {
 	private MyLogger logger = new MyLogger();
 
 	@Deprecated
-	public MyLogger fakeLogger = new MyLogger();
+	private MyLogger fakeLogger = new MyLogger();
 
 	@TryCatch(catchException= {BusinessRuleException.class, InvalidClassException.class})
 	public void create(final Exception value) throws Exception {
 		if (value != null) {
+			if(null != fakeLogger ) {
+				this.fakeLogger.logException(value);
+			}
 			throw value;
 		}
 	}
 
 	public void setLogger(MyLogger logger){
 		this.logger = logger;
+	}
+
+	public void setFakeLogger (final MyLogger logger) {
+		this.fakeLogger = logger;
 	}
 }
