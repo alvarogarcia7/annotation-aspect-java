@@ -100,6 +100,16 @@ public class AspectTest {
 		assertThat(caseVerifier.isUnexpected(), is(true));
 	}
 
+	@Test
+	public void any_other_decorated_logger_is_not_used() throws Exception {
+		final MyLogger mock = mock(MyLogger.class);
+		myComponent.setFakeLogger(mock);
+		Mockito.verifyNoMoreInteractions(mock);
+
+		myComponent.create(new BusinessRuleException());
+
+	}
+
 	private void assertCapturedException() {
 		assertThat(caseVerifier.isBefore(), is(true));
 		assertThat(caseVerifier.isAfter(), is(false));
