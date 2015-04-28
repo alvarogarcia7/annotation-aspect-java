@@ -34,7 +34,6 @@ public class MyAspect {
 
 	@Around("businessRules() && @annotation(tryCatch)")
 	public Object process(ProceedingJoinPoint jointPoint, TryCatch tryCatch) throws Throwable {
-		List<Class> exceptionNames = getExceptionsToBeCapturedFrom(tryCatch);
 		try {
 			collaborator.beforeJointPoint();
 			final Object proceed = jointPoint.proceed();
@@ -43,6 +42,7 @@ public class MyAspect {
 		} catch (Exception e){
 			ArrayList<MyLogger> loggers = findLoggersIn(jointPoint);
 			logInAll(loggers, e);
+			List<Class> exceptionNames = getExceptionsToBeCapturedFrom(tryCatch);
 			captureOrRethrow(exceptionNames, e);
 		}
 		return null;
