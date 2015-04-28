@@ -49,9 +49,7 @@ public class MyAspect {
 	}
 
 	private List<Class> getExceptionsToBeCapturedFrom(TryCatch tryCatch) {
-		Class<? extends Exception>[] exceptionsToBeCaught = tryCatch.catchException();
-
-		return asList(exceptionsToBeCaught);
+		return asList(tryCatch.catchException());
 	}
 
 	private void captureOrRethrow(List<Class> exceptionNames, Exception e) throws Exception {
