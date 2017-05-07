@@ -3,12 +3,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.gmaur.java</groupId>
-        <artifactId>parent</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
-    </parent>
-
     <groupId>com.example</groupId>
     <artifactId>aspect-and-annotation</artifactId>
     <name>Example :: aspects and annotations</name>
@@ -19,7 +13,27 @@
     </properties>
     <packaging>jar</packaging>
 
+    <parent>
+        <groupId>com.github.alvarogarcia7</groupId>
+        <artifactId>java-parent</artifactId>
+        <version>v0.0.1</version>
+    </parent>
+
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
     <dependencies>
+        <dependency>
+            <groupId>com.github.alvarogarcia7</groupId>
+            <artifactId>java-parent</artifactId>
+            <version>v0.0.1</version>
+            <type>pom</type>
+        </dependency>
+
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-all</artifactId>
