@@ -34,7 +34,6 @@ public class MyAspect {
 
 	@Around("businessRules() && @annotation(tryCatch)")
 	public Object process(ProceedingJoinPoint jointPoint, TryCatch tryCatch) throws Throwable {
-		List<String> exceptionNames = getExceptionsToBeCapturedFrom(tryCatch);
 		try {
 			collaborator.beforeJointPoint();
 			final Object proceed = jointPoint.proceed();
@@ -43,22 +42,25 @@ public class MyAspect {
 		} catch (Exception e){
 			ArrayList<MyLogger> loggers = findLoggersIn(jointPoint);
 			logInAll(loggers, e);
+			List<Class> exceptionNames = getExceptionsToBeCapturedFrom(tryCatch);
 			captureOrRethrow(exceptionNames, e);
 		}
 		return null;
 	}
 
-	private List<String> getExceptionsToBeCapturedFrom(TryCatch tryCatch) {
-		Class<? extends Exception>[] exceptionsToBeCaught = tryCatch.catchException();
-
-		return asList(exceptionsToBeCaught).stream().map(x -> x.getCanonicalName()).collect(toList());
+	private List<Class> getExceptionsToBeCapturedFrom(TryCatch tryCatch) {
+		return asList(tryCatch.catchException());
 	}
 
-	private void captureOrRethrow(List<String> exceptionNames, Exception e) throws Exception {
-		final String actualExceptionName = e.getClass().getCanonicalName();
-		if (exceptionNames.contains(actualExceptionName)) {
-			collaborator.capturedExpectedException();
-		} else {
+	private void captureOrRethrow(List<Class> exceptionNames, Exception e) throws Exception {
+		boolean found = false;
+		for (Class current : exceptionNames) {
+			if (current.isAssignableFrom(e.getClass())) {
+				found = true;
+				collaborator.capturedExpectedException();
+			}
+		}
+		if (!found) {
 			collaborator.capturedUnexpectedException();
 			throw e;
 		}

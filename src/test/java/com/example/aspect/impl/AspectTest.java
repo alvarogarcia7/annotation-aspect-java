@@ -3,6 +3,7 @@ package com.example.aspect.impl;
 import com.example.aspect.CaseVerifier;
 import com.example.booking.BookingCreator;
 import com.example.booking.MyLogger;
+import com.example.exception.BusinessChildException;
 import com.example.exception.BusinessRuleException;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -60,6 +61,13 @@ public class AspectTest {
 	@Test
 	public void capture_the_second_correct_exception() throws Exception {
 		myComponent.create(new InvalidClassException(""));
+
+		assertCapturedException();
+	}
+
+	@Test
+	public void capture_a_children_exception() throws Exception {
+		myComponent.create(new BusinessChildException());
 
 		assertCapturedException();
 	}
